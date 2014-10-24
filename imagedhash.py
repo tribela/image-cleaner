@@ -30,7 +30,7 @@ def dhash(image, hash_size=8):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('path', help='Find image from')
+parser.add_argument('path', help='Find images from')
 
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
