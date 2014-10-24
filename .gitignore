@@ -1,0 +1,16 @@
+.coverage
+.DS_Store
+.tox
+dist
+docs/_build
+*.egg-info
+MANIFEST
+.*.swp
+*.egg
+*.pyc
+.DS_Store
+.idea
+py
+_pytest
+pytest.py
+mock.py
