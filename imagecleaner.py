@@ -1,5 +1,4 @@
 import argparse
-import glob
 import os
 from collections import namedtuple
 from PIL import Image
@@ -29,6 +28,14 @@ def dhash(image, hash_size=8):
     return hash_num
 
 
+def get_images(from_path, file_types):
+    for root, dirs, files in os.walk(from_path):
+        for name in files:
+            file_path = os.path.join(root, name)
+            if (file_path.endswith(file_types)):
+                yield file_path
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('path', help='Find images from')
 
@@ -38,8 +45,7 @@ ImageFile = namedtuple('ImageFile', ('path', 'size'))
 def main():
     args = parser.parse_args()
 
-    query = os.path.join(args.path, '**/*.png')
-    img_paths = glob.iglob(query)
+    img_paths = get_images(args.path, ('.png', '.jpg'))
     imgs = {}
     for img_path in img_paths:
         image = Image.open(img_path)
