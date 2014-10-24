@@ -23,7 +23,7 @@ install_reqs = [str(ir.req) for ir in parse_requirements('requirements.txt')]
 setup(
     name='imagecleaner',
     description='Remove duplicated images from a path',
-    long_description=readfile('README.md'),
+    long_description=readfile('README.rst'),
     url='https://github.com/Kjwon15/image-cleaner',
     download_url='https://github.com/Kjwon15/image-cleaner/releases',
     author='Kjwon15',
