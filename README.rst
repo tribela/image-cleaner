@@ -18,7 +18,8 @@ Usage
 It's just simple one command!
 
 .. code-block:: console
-   image-cleaner <path>
+
+   $ image-cleaner <path>
 
 
 Reference
