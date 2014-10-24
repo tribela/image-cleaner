@@ -1,7 +1,7 @@
 import argparse
 import glob
+import os
 from collections import namedtuple
-from os import path
 from PIL import Image
 
 
@@ -38,7 +38,7 @@ ImageFile = namedtuple('ImageFile', ('path', 'size'))
 def main():
     args = parser.parse_args()
 
-    query = path.join(args.path, '**/*.png')
+    query = os.path.join(args.path, '**/*.png')
     img_paths = glob.iglob(query)
     imgs = {}
     for img_path in img_paths:
@@ -51,11 +51,11 @@ def main():
 
     duplicated = dict((key, imgs[key]) for key in imgs if len(imgs[key]) > 1)
 
-    for key in duplicated:
-        print(key)
-        for image in imgs[key]:
-            print(' {0.path}, {0.size}'.format(image))
-
+    for images in duplicated.values():
+        best_image = max(images, key=lambda x: x.size)
+        for image in images:
+            if image != best_image:
+                os.remove(image.path)
 
 if __name__ == '__main__':
     main()
