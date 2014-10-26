@@ -42,10 +42,8 @@ parser.add_argument('path', help='Find images from')
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
 
-def main():
-    args = parser.parse_args()
-
-    img_paths = get_images(args.path, ('.png', '.jpg'))
+def remove_images(path):
+    img_paths = get_images(path, ('.png', '.jpg'))
     imgs = {}
     for img_path in img_paths:
         image = Image.open(img_path)
@@ -62,6 +60,13 @@ def main():
         for image in images:
             if image != best_image:
                 os.remove(image.path)
+
+
+def main():
+    args = parser.parse_args()
+
+    remove_images(args.path)
+
 
 if __name__ == '__main__':
     main()
