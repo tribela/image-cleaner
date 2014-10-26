@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 from collections import namedtuple
 from PIL import Image
@@ -38,6 +39,8 @@ def get_images(from_path, file_types):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('path', help='Find images from')
+parser.add_argument('-v', '--verbose', default=0, action='count',
+                    help='Verbose output')
 
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
@@ -59,12 +62,18 @@ def remove_images(path):
         best_image = max(images, key=lambda x: x.size)
         for image in images:
             if image != best_image:
+                logging.info('Removing: {0}'.format(image.path))
                 os.remove(image.path)
 
 
 def main():
     args = parser.parse_args()
 
+    log_level = logging.WARNING
+    if args.verbose:
+        log_level = logging.INFO
+
+    logging.basicConfig(format='%(message)s', level=log_level)
     remove_images(args.path)
 
 
