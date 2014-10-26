@@ -4,6 +4,8 @@ import os
 from collections import namedtuple
 from PIL import Image
 
+__version__ = '0.1.0'
+
 
 def dhash(image, hash_size=8):
     # Grayscale and shrink the image.
