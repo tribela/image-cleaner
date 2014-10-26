@@ -43,11 +43,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('path', help='Find images from')
 parser.add_argument('-v', '--verbose', default=0, action='count',
                     help='Verbose output')
+parser.add_argument('-s', '--simulate', action='store_true')
 
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
 
-def remove_images(path):
+def remove_images(path, simulate=False):
     img_paths = get_images(path, ('.png', '.jpg'))
     imgs = {}
     for img_path in img_paths:
@@ -65,7 +66,8 @@ def remove_images(path):
         for image in images:
             if image != best_image:
                 logging.info('Removing: {0}'.format(image.path))
-                os.remove(image.path)
+                if not simulate:
+                    os.remove(image.path)
 
 
 def main():
@@ -76,7 +78,7 @@ def main():
         log_level = logging.INFO
 
     logging.basicConfig(format='%(message)s', level=log_level)
-    remove_images(args.path)
+    remove_images(args.path, args.simulate)
 
 
 if __name__ == '__main__':
