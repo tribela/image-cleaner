@@ -7,8 +7,12 @@ Remove duplicated images from a path.
 Installation
 ------------
 
+You can install image cleaner using pip.
+
 .. code-block:: console
 
+   $ pip install imagecleaner
+   # or install master branch
    $ pip install git+git@github.com:Kjwon15/image-cleaner.git
 
 
