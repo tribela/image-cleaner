@@ -52,12 +52,16 @@ def remove_images(path, simulate=False):
     img_paths = get_images(path, ('.png', '.jpg'))
     imgs = {}
     for img_path in img_paths:
-        image = Image.open(img_path)
-        size = image.size[0] * image.size[1]
-        img_hash = dhash(image)
-        if img_hash not in imgs:
-            imgs[img_hash] = []
-        imgs[img_hash].append(ImageFile(img_path, size))
+        try:
+            image = Image.open(img_path)
+            size = image.size[0] * image.size[1]
+            img_hash = dhash(image)
+            if img_hash not in imgs:
+                imgs[img_hash] = []
+            imgs[img_hash].append(ImageFile(img_path, size))
+        except IOError as e:
+            logging.warning(e.message)
+            continue
 
     duplicated = dict((key, imgs[key]) for key in imgs if len(imgs[key]) > 1)
 
