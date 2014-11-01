@@ -74,7 +74,7 @@ def main():
     args = parser.parse_args()
 
     log_level = logging.WARNING
-    if args.verbose:
+    if args.verbose or args.simulate:
         log_level = logging.INFO
 
     logging.basicConfig(format='%(message)s', level=log_level)

@@ -39,6 +39,7 @@ Change logs
 ~~~~~
 
 - Add simulate mode. It does not remove file.
+- Enable logging when simulate mode.
 
 
 License
