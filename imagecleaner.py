@@ -43,7 +43,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('path', help='Find images from')
 parser.add_argument('-v', '--verbose', default=0, action='count',
                     help='Verbose output')
-parser.add_argument('-s', '--simulate', action='store_true')
+parser.add_argument('-s', '--simulate', action='store_true',
+                    help='simulate mode. It does not remove image files')
 
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 

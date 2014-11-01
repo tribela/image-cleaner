@@ -35,6 +35,12 @@ http://blog.iconfinder.com/detecting-duplicate-images-using-python/
 Change logs
 -----------
 
+0.3.0
+~~~~~
+
+- Added help message for simulate mode.
+
+
 0.2.0
 ~~~~~
 
