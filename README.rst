@@ -39,6 +39,7 @@ Change logs
 ~~~~~
 
 - Added help message for simulate mode.
+- Leave last modified image when they has same size.
 
 
 0.2.0
