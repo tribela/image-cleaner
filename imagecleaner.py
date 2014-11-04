@@ -66,21 +66,28 @@ def remove_images(path, simulate=False):
 
     duplicated = dict((key, imgs[key]) for key in imgs if len(imgs[key]) > 1)
 
+    count = 0
     for images in duplicated.values():
         best_image = max(images, key=lambda x: x.size)
+        logging.debug('leaving best image: {0}'.format(best_image.path))
         for image in images:
             if image != best_image:
                 logging.info('Removing: {0}'.format(image.path))
+                count += 1
                 if not simulate:
                     os.remove(image.path)
+
+    logging.info('Removed {0} images.'.format(count))
 
 
 def main():
     args = parser.parse_args()
 
     log_level = logging.WARNING
-    if args.verbose or args.simulate:
+    if args.verbose == 1:
         log_level = logging.INFO
+    elif args.verbose > 1 or args.simulate:
+        log_level = logging.DEBUG
 
     logging.basicConfig(format='%(message)s', level=log_level)
     remove_images(args.path, args.simulate)
