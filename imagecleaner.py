@@ -31,16 +31,17 @@ def dhash(image, hash_size=8):
     return hash_num
 
 
-def get_images(from_path, file_types):
-    for root, dirs, files in os.walk(from_path):
-        for name in files:
-            file_path = os.path.join(root, name)
-            if (file_path.endswith(file_types)):
-                yield file_path
+def get_images(from_paths, file_types):
+    for path in from_paths:
+        for root, dirs, files in os.walk(path):
+            for name in files:
+                file_path = os.path.join(root, name)
+                if (file_path.endswith(file_types)):
+                    yield file_path
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('path', help='Find images from')
+parser.add_argument('paths', nargs='+', help='Find images from')
 parser.add_argument('-v', '--verbose', default=0, action='count',
                     help='Verbose output')
 parser.add_argument('-s', '--simulate', action='store_true',
@@ -91,7 +92,7 @@ def main():
         log_level = logging.DEBUG
 
     logging.basicConfig(format='%(message)s', level=log_level)
-    remove_images(args.path, args.simulate)
+    remove_images(args.paths, args.simulate)
 
 
 if __name__ == '__main__':
