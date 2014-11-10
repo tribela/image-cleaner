@@ -85,13 +85,15 @@ def remove_images(path, simulate=False):
 def main():
     args = parser.parse_args()
 
-    log_level = logging.WARNING
-    if args.verbose == 1:
-        log_level = logging.INFO
-    elif args.verbose > 1 or args.simulate:
-        log_level = logging.DEBUG
+    log_levels = [logging.WARNING, logging.INFO, logging.DEBUG]
+    log_level = 1 if args.simulate else 0
+    log_level += args.verbose
+    try:
+        logging_level = log_levels[log_level]
+    except IndexError:
+        logging_level = log_levels[-1]
 
-    logging.basicConfig(format='%(message)s', level=log_level)
+    logging.basicConfig(format='%(message)s', level=logging_level)
     remove_images(args.paths, args.simulate)
 
 
