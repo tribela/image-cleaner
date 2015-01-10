@@ -69,8 +69,8 @@ def remove_images(path, simulate=False):
 
     count = 0
     for images in duplicated.values():
-        best_image = max(images,
-                         key=lambda x: (x.size, os.path.getmtime(x.path)))
+        best_image = max(images, key=lambda x: (
+            x.size, os.path.getsize(x.path), os.path.getmtime(x.path)))
         logging.debug('leaving best image: {0}'.format(best_image.path))
         for image in images:
             if image != best_image:
