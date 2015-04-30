@@ -7,7 +7,7 @@ from PIL import Image
 __version__ = '0.3.0'
 
 
-def dhash(image, hash_size=8):
+def dhash(image, hash_size):
     # Grayscale and shrink the image.
     image = image.convert('L').resize(
         (hash_size + 1, hash_size),
@@ -42,6 +42,9 @@ def get_images(from_paths, file_types):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('paths', nargs='+', help='Find images from')
+parser.add_argument('-S', '--hashsize', type=int, default=8,
+                    help='Hash size.'
+                    ' give greater number for more finely search')
 parser.add_argument('-v', '--verbose', default=0, action='count',
                     help='Verbose output')
 parser.add_argument('-s', '--simulate', action='store_true',
@@ -50,14 +53,14 @@ parser.add_argument('-s', '--simulate', action='store_true',
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
 
-def remove_images(path, simulate=False):
+def remove_images(path, hash_size=8, simulate=False):
     img_paths = get_images(path, ('.png', '.jpg'))
     imgs = {}
     for img_path in img_paths:
         try:
             image = Image.open(img_path)
             size = image.size[0] * image.size[1]
-            img_hash = dhash(image)
+            img_hash = dhash(image, hash_size)
             if img_hash not in imgs:
                 imgs[img_hash] = []
             imgs[img_hash].append(ImageFile(img_path, size))
@@ -94,7 +97,7 @@ def main():
         logging_level = log_levels[-1]
 
     logging.basicConfig(format='%(message)s', level=logging_level)
-    remove_images(args.paths, args.simulate)
+    remove_images(args.paths, args.hashsize, args.simulate)
 
 
 if __name__ == '__main__':
