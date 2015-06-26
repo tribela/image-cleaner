@@ -35,6 +35,12 @@ http://blog.iconfinder.com/detecting-duplicate-images-using-python/
 Change logs
 -----------
 
+0.2.1
+~~~~~
+
+- Log an error correctly.
+
+
 0.2.0
 ~~~~~
 

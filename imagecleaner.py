@@ -60,7 +60,7 @@ def remove_images(path, simulate=False):
                 imgs[img_hash] = []
             imgs[img_hash].append(ImageFile(img_path, size))
         except IOError as e:
-            logging.warning(e.message)
+            logging.error('{0} {1}'.format(img_path, e.message))
             continue
 
     duplicated = dict((key, imgs[key]) for key in imgs if len(imgs[key]) > 1)
