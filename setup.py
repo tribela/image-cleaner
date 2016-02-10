@@ -1,5 +1,4 @@
 import os.path
-from pip.req import parse_requirements
 from imagecleaner import __version__ as version
 
 try:
@@ -18,7 +17,9 @@ def readfile(filename):
         return ''
 
 
-install_reqs = [str(ir.req) for ir in parse_requirements('requirements.txt')]
+install_reqs = [
+    'Pillow>=2.6.1',
+]
 
 
 setup(
