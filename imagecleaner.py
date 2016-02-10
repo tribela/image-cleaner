@@ -58,6 +58,7 @@ def remove_images(path, hash_size=8, simulate=False):
     imgs = {}
     for img_path in img_paths:
         try:
+            logging.debug(img_path)
             image = Image.open(img_path)
             size = image.size[0] * image.size[1]
             img_hash = dhash(image, hash_size)
@@ -65,7 +66,7 @@ def remove_images(path, hash_size=8, simulate=False):
                 imgs[img_hash] = []
             imgs[img_hash].append(ImageFile(img_path, size))
         except IOError as e:
-            logging.warning(e.message)
+            logging.warning('{}: {}', img_path, e)
             continue
 
     duplicated = dict((key, imgs[key]) for key in imgs if len(imgs[key]) > 1)
@@ -74,7 +75,7 @@ def remove_images(path, hash_size=8, simulate=False):
     for images in duplicated.values():
         best_image = max(images, key=lambda x: (
             x.size, os.path.getsize(x.path), os.path.getmtime(x.path)))
-        logging.debug('leaving best image: {0}'.format(best_image.path))
+        logging.info('leaving best image: {0}'.format(best_image.path))
         for image in images:
             if image != best_image:
                 logging.info('Removing: {0}'.format(image.path))
