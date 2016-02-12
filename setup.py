@@ -1,5 +1,4 @@
 import os.path
-from imagecleaner import __version__ as version
 
 try:
     from setuptools import find_packages, setup
@@ -26,7 +25,7 @@ setup(
     name='imagecleaner',
     description='Remove duplicated images from a path',
     long_description=readfile('README.rst'),
-    version=version,
+    version='0.3.0',
     url='https://github.com/Kjwon15/image-cleaner',
     download_url='https://github.com/Kjwon15/image-cleaner/releases',
     author='Kjwon15',
