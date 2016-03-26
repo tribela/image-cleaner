@@ -1,7 +1,7 @@
 import argparse
 import logging
 import os
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 from PIL import Image
 
 
@@ -53,24 +53,23 @@ ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
 def remove_images(path, hash_size=8, simulate=False):
     img_paths = get_images(path, ('.png', '.jpg'))
-    imgs = {}
+    imgs = defaultdict(list)
     for img_path in img_paths:
         try:
             logging.debug(img_path)
             image = Image.open(img_path)
             size = image.size[0] * image.size[1]
             img_hash = dhash(image, hash_size)
-            if img_hash not in imgs:
-                imgs[img_hash] = []
             imgs[img_hash].append(ImageFile(img_path, size))
         except IOError as e:
             logging.warning('{}: {}', img_path, e)
             continue
 
-    duplicated = dict((key, imgs[key]) for key in imgs if len(imgs[key]) > 1)
-
     count = 0
-    for images in duplicated.values():
+    for images in imgs.values():
+        if len(images) < 2:
+            continue
+
         best_image = max(images, key=lambda x: (
             x.size, os.path.getsize(x.path), os.path.getmtime(x.path)))
         logging.info('leaving best image: {0}'.format(best_image.path))
