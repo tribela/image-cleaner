@@ -69,16 +69,20 @@ def remove_images(path, hash_size, simulate=False):
     imgs = defaultdict(list)
     get_image_partial = functools.partial(get_image_hash, hash_size)
 
-    pool = Pool(cpu_count() * 4)
+    try:
+        pool = Pool(cpu_count() * 4)
+        for result in pool.map(get_image_partial, img_paths):
+            if result is None:
+                continue
+            img_hash, img_file = result
+            imgs[img_hash].append(img_file)
 
-    for result in pool.map(get_image_partial, img_paths):
-        if result is None:
-            continue
-        img_hash, img_file = result
-        imgs[img_hash].append(img_file)
-
-    pool.close()
-    pool.join()
+    except KeyboardInterrupt:
+        pool.terminate()
+    else:
+        pool.close()
+    finally:
+        pool.join()
 
     count = 0
     for images in imgs.values():

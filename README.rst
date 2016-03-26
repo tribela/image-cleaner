@@ -35,6 +35,12 @@ http://blog.iconfinder.com/detecting-duplicate-images-using-python/
 Change logs
 -----------
 
+0.3.2
+~~~~~
+
+- Handle interrupt.
+
+
 0.3.1
 ~~~~~
 
