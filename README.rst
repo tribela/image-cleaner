@@ -35,6 +35,13 @@ http://blog.iconfinder.com/detecting-duplicate-images-using-python/
 Change logs
 -----------
 
+0.3.1
+~~~~~
+
+- Improvement speed by using multi-thread.
+- Change default hash size from 8 to 16.
+
+
 0.3.0
 ~~~~~
 
