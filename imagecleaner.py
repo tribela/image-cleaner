@@ -42,7 +42,7 @@ def get_images(from_paths, file_types):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('paths', nargs='+', help='Find images from')
-parser.add_argument('-S', '--hashsize', type=int, default=8,
+parser.add_argument('-S', '--hashsize', type=int, default=16,
                     help='Hash size.'
                     ' give greater number for more finely search')
 parser.add_argument('-v', '--verbose', default=0, action='count',
@@ -64,7 +64,7 @@ def get_image_hash(hash_size, img_path):
         logging.warning('{}: {}', img_path, e)
 
 
-def remove_images(path, hash_size=8, simulate=False):
+def remove_images(path, hash_size, simulate=False):
     img_paths = get_images(path, ('.png', '.jpg'))
     imgs = defaultdict(list)
     get_image_partial = functools.partial(get_image_hash, hash_size)
