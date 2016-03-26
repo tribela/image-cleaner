@@ -1,7 +1,9 @@
 import argparse
+import functools
 import logging
 import os
 from collections import defaultdict, namedtuple
+from multiprocessing import Pool, cpu_count
 from PIL import Image
 
 
@@ -51,19 +53,32 @@ parser.add_argument('-s', '--simulate', action='store_true',
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
 
+def get_image_hash(hash_size, img_path):
+    try:
+        logging.debug(img_path)
+        image = Image.open(img_path)
+        size = image.size[0] * image.size[1]
+        img_hash = dhash(image, hash_size)
+        return (img_hash, ImageFile(img_path, size))
+    except IOError as e:
+        logging.warning('{}: {}', img_path, e)
+
+
 def remove_images(path, hash_size=8, simulate=False):
     img_paths = get_images(path, ('.png', '.jpg'))
     imgs = defaultdict(list)
-    for img_path in img_paths:
-        try:
-            logging.debug(img_path)
-            image = Image.open(img_path)
-            size = image.size[0] * image.size[1]
-            img_hash = dhash(image, hash_size)
-            imgs[img_hash].append(ImageFile(img_path, size))
-        except IOError as e:
-            logging.warning('{}: {}', img_path, e)
+    get_image_partial = functools.partial(get_image_hash, hash_size)
+
+    pool = Pool(cpu_count() * 4)
+
+    for result in pool.map(get_image_partial, img_paths):
+        if result is None:
             continue
+        img_hash, img_file = result
+        imgs[img_hash].append(img_file)
+
+    pool.close()
+    pool.join()
 
     count = 0
     for images in imgs.values():
