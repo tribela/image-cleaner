@@ -6,6 +6,11 @@ from collections import defaultdict, namedtuple
 from multiprocessing import Pool, cpu_count
 from PIL import Image
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 
 def dhash(image, hash_size):
     # Grayscale and shrink the image.
