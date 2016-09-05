@@ -18,6 +18,7 @@ def readfile(filename):
 
 install_reqs = [
     'Pillow>=2.6.1',
+    'appdirs>=1.4.0',
 ]
 
 

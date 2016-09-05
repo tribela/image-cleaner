@@ -1,15 +1,24 @@
 import argparse
 import functools
+import hashlib
 import logging
 import os
+
 from collections import defaultdict, namedtuple
 from multiprocessing import Pool, cpu_count
+from os import path
+
+import appdirs
 from PIL import Image
 
 try:
     xrange
 except NameError:
     xrange = range
+
+caching_dir = appdirs.user_cache_dir('imagecleaner', 'kjwon15')
+if not path.exists(caching_dir):
+    os.mkdir(caching_dir)
 
 
 def dhash(image, hash_size):
@@ -19,26 +28,38 @@ def dhash(image, hash_size):
         Image.ANTIALIAS,
     )
 
-    differences = []
-    for row in xrange(hash_size):
-        for col in xrange(hash_size):
-            pixel_left = image.getpixel((col, row))
-            pixel_right = image.getpixel((col + 1, row))
+    try:
+        cache_name = path.join(
+            caching_dir,
+            hashlib.sha256(image.tobytes()).hexdigest()
+        )
+        with open(cache_name) as fp:
+            hash_num = int(fp.read())
+            logging.debug('Using cache')
+    except (IOError, ValueError):
+        differences = []
+        for row in xrange(hash_size):
+            for col in xrange(hash_size):
+                pixel_left = image.getpixel((col, row))
+                pixel_right = image.getpixel((col + 1, row))
 
-            differences.append(pixel_left > pixel_right)
+                differences.append(pixel_left > pixel_right)
 
-    hash_num = 0
-    for value in differences:
-        hash_num *= 2
-        if value:
-            hash_num += 1
+        hash_num = 0
+        for value in differences:
+            hash_num *= 2
+            if value:
+                hash_num += 1
+
+        with open(cache_name, 'w') as fp:
+            fp.write(str(hash_num))
 
     return hash_num
 
 
 def get_images(from_paths, file_types):
-    for path in from_paths:
-        for root, dirs, files in os.walk(path):
+    for path_ in from_paths:
+        for root, dirs, files in os.walk(path_):
             for name in files:
                 file_path = os.path.join(root, name)
                 if (file_path.endswith(file_types)):

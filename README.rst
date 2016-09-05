@@ -39,6 +39,7 @@ Change logs
 ~~~~~
 
 - Handle interrupt.
+- Caching dhash to run faster.
 
 
 0.3.1
