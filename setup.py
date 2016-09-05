@@ -26,7 +26,7 @@ setup(
     name='imagecleaner',
     description='Remove duplicated images from a path',
     long_description=readfile('README.rst'),
-    version='0.3.1',
+    version='0.3.2',
     url='https://github.com/Kjwon15/image-cleaner',
     download_url='https://github.com/Kjwon15/image-cleaner/releases',
     author='Kjwon15',
