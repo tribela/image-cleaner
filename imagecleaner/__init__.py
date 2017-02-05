@@ -92,7 +92,7 @@ def get_image_hash(hash_size, img_path):
         img_hash = dhash(image, hash_size)
         return (img_hash, ImageFile(img_path, size))
     except IOError as e:
-        logger.warning('{}: {}', img_path, str(e))
+        logger.warning('{}: {}'.format(img_path, e))
 
 
 def remove_images(path, hash_size, threads_count, simulate=False):
