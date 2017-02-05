@@ -20,6 +20,8 @@ caching_dir = appdirs.user_cache_dir('imagecleaner', 'kjwon15')
 if not path.exists(caching_dir):
     os.mkdir(caching_dir)
 
+logger = logging.getLogger(__name__)
+
 
 def dhash(image, hash_size):
     # Grayscale and shrink the image.
@@ -35,7 +37,7 @@ def dhash(image, hash_size):
         )
         with open(cache_name) as fp:
             hash_num = int(fp.read())
-            logging.debug('Using cache')
+            logger.debug('Using cache')
     except (IOError, ValueError):
         differences = []
         for row in xrange(hash_size):
@@ -81,13 +83,13 @@ ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
 def get_image_hash(hash_size, img_path):
     try:
-        logging.debug(img_path)
+        logger.debug(img_path)
         image = Image.open(img_path)
         size = image.size[0] * image.size[1]
         img_hash = dhash(image, hash_size)
         return (img_hash, ImageFile(img_path, size))
     except IOError as e:
-        logging.warning('{}: {}', img_path, e)
+        logger.warning('{}: {}', img_path, str(e))
 
 
 def remove_images(path, hash_size, simulate=False):
@@ -117,15 +119,15 @@ def remove_images(path, hash_size, simulate=False):
 
         best_image = max(images, key=lambda x: (
             x.size, os.path.getsize(x.path), os.path.getmtime(x.path)))
-        logging.info('leaving best image: {0}'.format(best_image.path))
+        logger.info('leaving best image: {0}'.format(best_image.path))
         for image in images:
             if image != best_image:
-                logging.info('Removing: {0}'.format(image.path))
+                logger.info('Removing: {0}'.format(image.path))
                 count += 1
                 if not simulate:
                     os.remove(image.path)
 
-    logging.info('Removed {0} images.'.format(count))
+    logger.info('Removed {0} images.'.format(count))
 
 
 def main():
@@ -139,8 +141,9 @@ def main():
     except IndexError:
         logging_level = log_levels[-1]
 
-    logging.basicConfig(format='%(message)s', level=logging_level)
-    remove_images(args.paths, args.hashsize, args.simulate)
+    logging.basicConfig(format='%(message)s')
+    logger.setLevel(logging_level)
+    remove_images(args.paths, args.hashsize, args.threads, args.simulate)
 
 
 if __name__ == '__main__':
