@@ -35,6 +35,12 @@ http://blog.iconfinder.com/detecting-duplicate-images-using-python/
 Change logs
 -----------
 
+0.4.0
+~~~~~
+
+- Fix logging.
+- Adjustment threads count by command argument.
+
 0.3.2
 ~~~~~
 

@@ -77,6 +77,9 @@ parser.add_argument('-v', '--verbose', default=0, action='count',
                     help='Verbose output')
 parser.add_argument('-s', '--simulate', action='store_true',
                     help='simulate mode. It does not remove image files')
+parser.add_argument(
+    '-t', '--threads', type=int, default=0,
+    help="Thread counts, negative value means -value * cpu_count")
 
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
@@ -92,13 +95,19 @@ def get_image_hash(hash_size, img_path):
         logger.warning('{}: {}', img_path, str(e))
 
 
-def remove_images(path, hash_size, simulate=False):
+def remove_images(path, hash_size, threads_count, simulate=False):
     img_paths = get_images(path, ('.png', '.jpg'))
     imgs = defaultdict(list)
     get_image_partial = functools.partial(get_image_hash, hash_size)
 
     try:
-        pool = Pool(cpu_count() * 4)
+        if threads_count < 0:
+            threads_count = -threads_count * cpu_count()
+        elif threads_count == 0:
+            # Failsafe
+            threads_count = cpu_count()
+        logger.debug('Using {} threads'.format(threads_count))
+        pool = Pool(threads_count)
         for result in pool.map(get_image_partial, img_paths):
             if result is None:
                 continue
