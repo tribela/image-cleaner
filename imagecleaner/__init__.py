@@ -30,11 +30,15 @@ def dhash(image, hash_size):
         Image.ANTIALIAS,
     )
 
-    try:
-        cache_name = path.join(
-            caching_dir,
-            hashlib.sha256(image.tobytes()).hexdigest()
+    cache_name = path.join(
+        caching_dir,
+        '{}-S{}'.format(
+            hashlib.sha256(image.tobytes()).hexdigest(),
+            hash_size
         )
+    )
+
+    try:
         with open(cache_name) as fp:
             hash_num = int(fp.read())
             logger.debug('Using cache')
