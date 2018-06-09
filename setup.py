@@ -35,7 +35,7 @@ setup(
     author_email='kjwonmail@gmail.com',
     entry_points={
         'console_scripts': [
-            'image-cleaner = imagecleaner:main'
+            'image-cleaner = imagecleaner.cli:main'
         ]
     },
     packages=find_packages(),
