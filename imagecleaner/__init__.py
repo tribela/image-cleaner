@@ -11,6 +11,8 @@ from os import path
 import appdirs
 from PIL import Image
 
+from ._version import __version__
+
 try:
     xrange
 except NameError:
@@ -84,6 +86,9 @@ parser.add_argument('-s', '--simulate', action='store_true',
 parser.add_argument(
     '-t', '--threads', type=int, default=0,
     help="Thread counts, negative value means -value * cpu_count")
+
+parser.add_argument('-V', '--version', action='version',
+                    version='%(prog)s {}'.format(__version__))
 
 ImageFile = namedtuple('ImageFile', ('path', 'size'))
 
