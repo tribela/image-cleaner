@@ -18,7 +18,7 @@ try:
 except NameError:
     xrange = range
 
-caching_dir = appdirs.user_cache_dir('imagecleaner', 'kjwon15')
+caching_dir = os.path.expanduser(os.getenv('USERPROFILE')) + '\\Desktop\\cache'
 if not path.exists(caching_dir):
     os.mkdir(caching_dir)
 
