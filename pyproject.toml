@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "image-cleaner"
+version = "0.4.4"
+description = "Remove duplicated images from a path"
+authors = ["'Jeong Arm' <'kjwonmail@gmail.com'>"]
+license = "MIT"
+readme = "README.md"
+
+packages = [
+    { include = "imagecleaner", from="." }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pillow = "^10.2.0"
+appdirs = "^1.4.4"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.0.0"
+flake8-import-order = "^0.18.2"
+flake8-builtins = "^2.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+image-cleaner = 'imagecleaner.cli:main'
