@@ -5,7 +5,7 @@ import logging
 import os
 
 from collections import defaultdict, namedtuple
-from multiprocessing import Pool, cpu_count
+from multiprocessing import cpu_count, Pool
 from os import path
 
 import appdirs
@@ -18,7 +18,7 @@ try:
 except NameError:
     xrange = range
 
-caching_dir = appdirs.user_cache_dir('imagecleaner', 'kjwon15')
+caching_dir = appdirs.user_cache_dir('imagecleaner', 'tribela')
 if not path.exists(caching_dir):
     os.mkdir(caching_dir)
 
@@ -29,7 +29,7 @@ def dhash(image, hash_size):
     # Grayscale and shrink the image.
     image = image.convert('L').resize(
         (hash_size + 1, hash_size),
-        Image.ANTIALIAS,
+        Image.LANCZOS,
     )
 
     cache_name = path.join(
